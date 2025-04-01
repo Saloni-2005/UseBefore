@@ -13,7 +13,25 @@
         android:theme="@style/Theme.UseBefore"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".view.HousesHomePage"
+            android:exported="false" />
+        <activity
+            android:name=".view.RetailHomePage"
+            android:exported="false" />
+        <activity
+            android:name=".view.SignupRetails"
+            android:exported="false" />
+        <activity
+            android:name=".view.LoginRetails"
+            android:exported="false" />
+        <activity
+            android:name=".view.SignupHouses"
+            android:exported="false" />
+        <activity
+            android:name=".view.LoginHouses"
+            android:exported="false" />
+        <activity
+            android:name=".view.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
