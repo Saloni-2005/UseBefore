@@ -42,6 +42,11 @@ class LoginHouses : AppCompatActivity() {
             startActivity(Intent(this, SignupHouses::class.java))
             finish()
         }
+
+        binding.guest.setOnClickListener {
+            startActivity(Intent(this, HousesHomePage::class.java))
+            finish()
+        }
     }
 
     private fun validateLogin(username: String, password: String) {
@@ -53,7 +58,7 @@ class LoginHouses : AppCompatActivity() {
                         val userData = userSnapshot.getValue(HouseUsers::class.java)
                         if (userData != null && userData.password == password) {
                             Toast.makeText(applicationContext, "Login Successful", Toast.LENGTH_SHORT).show()
-                            startActivity(Intent(this@LoginHouses, MainActivity::class.java))
+                            startActivity(Intent(this@LoginHouses, HousesHomePage::class.java))
                             finish()
                             return
                         }

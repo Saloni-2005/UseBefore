@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">UseBefore</string>
+    <string name="guest_mode"><u>Guest Mode</u></string>
 </resources>

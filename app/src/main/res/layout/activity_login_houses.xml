@@ -76,6 +76,19 @@
         android:layout_below="@+id/mybutton"
         android:textAlignment="center"
         android:layout_marginTop="30dp"
-        android:id="@+id/mysignup"/>
+        android:id="@+id/mysignup"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/guest_mode"
+        android:textStyle="bold"
+        android:layout_marginBottom="40dp"
+        android:gravity="center"
+        android:textSize="20dp"
+        android:fontFamily="casual"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/guest"/>
 
 </RelativeLayout>
