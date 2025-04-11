@@ -7,21 +7,20 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.usebefore.R
-import com.example.usebefore.databinding.ActivityHousesHomePageBinding
+import com.example.usebefore.databinding.ActivityProfilePageHouseBinding
 
-class HousesHomePage : AppCompatActivity() {
+class ProfilePageHouse : AppCompatActivity() {
 
-    private lateinit var binding: ActivityHousesHomePageBinding
+    private lateinit var binding: ActivityProfilePageHouseBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityHousesHomePageBinding.inflate(layoutInflater)
+        binding = ActivityProfilePageHouseBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.profileview.setOnClickListener {
-            val intent = Intent(this, ProfilePageHouse::class.java)
-            startActivity(intent)
+        binding.btnBack.setOnClickListener {
+            startActivity(Intent(this@ProfilePageHouse, HousesHomePage::class.java))
         }
     }
 }

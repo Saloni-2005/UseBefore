@@ -13,6 +13,9 @@
         android:theme="@style/Theme.UseBefore"
         tools:targetApi="31">
         <activity
+            android:name=".view.ProfilePageHouse"
+            android:exported="false" />
+        <activity
             android:name=".view.HousesHomePage"
             android:exported="false" />
         <activity
