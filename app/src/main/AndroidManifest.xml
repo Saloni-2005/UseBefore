@@ -4,6 +4,8 @@
 
     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
     <uses-permission android:name="android.permission.USE_FINGERPRINT" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <uses-feature
         android:name="android.hardware.fingerprint"
@@ -19,6 +21,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.UseBefore"
         tools:targetApi="31">
+        <activity
+            android:name=".view.SplashActivity"
+            android:exported="false" />
         <activity
             android:name=".view.ProfilePageHouse"
             android:exported="false" />
