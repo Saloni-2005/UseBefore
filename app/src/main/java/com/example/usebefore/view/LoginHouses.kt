@@ -4,6 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.biometric.BiometricManager
+import androidx.biometric.BiometricPrompt
+import androidx.core.content.ContextCompat
 import com.example.usebefore.databinding.ActivityLoginHousesBinding
 import com.example.usebefore.repository.HouseUsers
 import com.google.firebase.database.DataSnapshot
@@ -47,6 +50,50 @@ class LoginHouses : AppCompatActivity() {
             startActivity(Intent(this, HousesHomePage::class.java))
             finish()
         }
+
+        val biometricManager = BiometricManager.from(this)
+        when(biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG)){
+            BiometricManager.BIOMETRIC_SUCCESS -> {
+                binding.fingerprint.setOnClickListener {
+                    authenticate()
+                }
+            }
+            BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE,
+                BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE,
+                BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED -> {
+                    Toast.makeText(this , "Biometric not matched" , Toast.LENGTH_LONG).show()
+                }
+        }
+    }
+
+    private fun authenticate(){
+        val executor = ContextCompat.getMainExecutor(this)
+        val bioometricPrompt = BiometricPrompt(this , executor , object : BiometricPrompt.AuthenticationCallback(){
+            override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                super.onAuthenticationSucceeded(result)
+                Toast.makeText(applicationContext , "Fingerprint Authentication Successful" , Toast.LENGTH_SHORT).show()
+                startActivity(Intent(applicationContext , HousesHomePage::class.java))
+                finish()
+            }
+
+            override fun onAuthenticationFailed() {
+                super.onAuthenticationFailed()
+                Toast.makeText(applicationContext ,"Finger not matched" , Toast.LENGTH_LONG).show()
+            }
+
+            override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
+                super.onAuthenticationError(errorCode, errString)
+                Toast.makeText(applicationContext , "Clean Sensor / fetal error : $errString" , Toast.LENGTH_LONG ).show()
+            }
+        })
+
+        val promptInfo = BiometricPrompt.PromptInfo.Builder()
+            .setTitle("Biometric Authentication")
+            .setSubtitle("Login using fingerprint")
+            .setNegativeButtonText("Cancel")
+            .build()
+
+        bioometricPrompt.authenticate(promptInfo)
     }
 
     private fun validateLogin(username: String, password: String) {
@@ -74,4 +121,6 @@ class LoginHouses : AppCompatActivity() {
             }
         })
     }
+
+
 }

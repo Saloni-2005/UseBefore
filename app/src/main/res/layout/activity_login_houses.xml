@@ -64,8 +64,20 @@
         android:text="Login"
         android:layout_below="@+id/mypassword"
         android:layout_marginTop="30dp"
-        android:layout_marginHorizontal="50dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="80dp"
         android:id="@+id/mybutton"/>
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/mypassword"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="20dp"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/baseline_fingerprint_24"
+        android:id="@+id/fingerprint"/>
+
 
     <TextView
         android:layout_width="match_parent"
