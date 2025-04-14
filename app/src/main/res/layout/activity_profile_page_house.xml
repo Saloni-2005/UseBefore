@@ -259,14 +259,32 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@id/txtDarkModeLabel" />
 
+                <TextView
+                    android:id="@+id/txtFingerprintLabel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Fingerprint Verification"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toStartOf="@id/switchFingerprint"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/txtDarkModeLabel" />
 
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/switchFingerprint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    app:layout_constraintBottom_toBottomOf="@id/txtFingerprintLabel"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/txtFingerprintLabel" />
                 <!-- Edit Profile Button -->
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnEditProfile"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="32dp"
-                    android:layout_marginTop="32dp"
+                    android:layout_marginTop="20dp"
                     android:backgroundTint="#260262"
                     android:padding="12dp"
                     android:text="Edit Profile"
@@ -276,7 +294,7 @@
                     android:layout_marginBottom="15dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/txtDarkModeLabel" />
+                    app:layout_constraintTop_toBottomOf="@id/txtFingerprintLabel" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>

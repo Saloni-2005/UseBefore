@@ -46,11 +46,6 @@ class LoginHouses : AppCompatActivity() {
             finish()
         }
 
-        binding.guest.setOnClickListener {
-            startActivity(Intent(this, HousesHomePage::class.java))
-            finish()
-        }
-
         val biometricManager = BiometricManager.from(this)
         when(biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG)){
             BiometricManager.BIOMETRIC_SUCCESS -> {

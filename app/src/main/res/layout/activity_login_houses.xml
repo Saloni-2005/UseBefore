@@ -68,17 +68,6 @@
         android:layout_marginRight="80dp"
         android:id="@+id/mybutton"/>
 
-    <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_below="@+id/mypassword"
-        android:layout_marginTop="30dp"
-        android:layout_marginRight="20dp"
-        android:layout_alignParentRight="true"
-        android:src="@drawable/baseline_fingerprint_24"
-        android:id="@+id/fingerprint"/>
-
-
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -94,7 +83,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/guest_mode"
+        android:text="Guest Mode"
         android:textStyle="bold"
         android:layout_marginBottom="40dp"
         android:gravity="center"
@@ -102,5 +91,15 @@
         android:fontFamily="casual"
         android:layout_alignParentBottom="true"
         android:id="@+id/guest"/>
+
+    <ImageView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="40dp"
+        android:layout_marginRight="100dp"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/baseline_fingerprint_24"
+        android:id="@+id/fingerprint"/>
 
 </RelativeLayout>

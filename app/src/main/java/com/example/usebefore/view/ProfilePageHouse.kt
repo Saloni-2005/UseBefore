@@ -85,11 +85,57 @@ class ProfilePageHouse : AppCompatActivity() {
                 showSaveChangesDialog()
             }
         }
+//
+//        binding.switchNotifications.setOnClickListener { _, isChecked ->
+//            if(isEditMode){
+//
+//            }
+//        }
+//
+//        binding.switchDarkMode.setOnClickListener { _, isChecked ->
+//            if(isEditMode){
+//
+//            }
+//        }
 
-
+        binding.switchFingerprint.setOnClickListener {
+            if (isEditMode) {
+                // Check if device supports biometric authentication
+                checkBiometricSupport()
+            } else {
+                // Reset to original value if not in edit mode
+                binding.switchFingerprint.isChecked = sharedPreferences.getBoolean("fingerprintEnabled", false)
+                Toast.makeText(this, "Enable edit mode to change settings", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
-
+    private fun checkBiometricSupport() {
+        val biometricManager = BiometricManager.from(this)
+        when (biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG)) {
+            BiometricManager.BIOMETRIC_SUCCESS -> {
+                // Device supports biometric authentication and has biometrics enrolled
+                // Continue with enabling the feature
+                return
+            }
+            BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE -> {
+                Toast.makeText(this, "This device doesn't support fingerprint authentication", Toast.LENGTH_LONG).show()
+                binding.switchFingerprint.isChecked = false
+            }
+            BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE -> {
+                Toast.makeText(this, "Biometric features are currently unavailable", Toast.LENGTH_LONG).show()
+                binding.switchFingerprint.isChecked = false
+            }
+            BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED -> {
+                Toast.makeText(this, "No fingerprints enrolled. Please register at least one fingerprint in your device settings", Toast.LENGTH_LONG).show()
+                binding.switchFingerprint.isChecked = false
+            }
+            else -> {
+                Toast.makeText(this, "Biometric authentication unavailable", Toast.LENGTH_LONG).show()
+                binding.switchFingerprint.isChecked = false
+            }
+        }
+    }
 
 
     private fun loadUserDetails(){
