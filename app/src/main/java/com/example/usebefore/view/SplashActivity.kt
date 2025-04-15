@@ -5,6 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.animation.AnimationUtils
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -21,9 +23,13 @@ class SplashActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_splash)
 
+        val logoImageView = findViewById<ImageView>(R.id.splash_logo)
+        val animation = AnimationUtils.loadAnimation(this, R.anim.fade_slide)
+        logoImageView.startAnimation(animation)
 
         val sharedPreferences = getSharedPreferences("ProfilePrefs", Context.MODE_PRIVATE)
-        val isFingerprintEnabled = sharedPreferences.getBoolean("fingerprintEnabled", false)
+//        val isFingerprintEnabled = sharedPreferences.getBoolean("fingerprintEnabled", false)
+        val isFingerprintEnabled = true
 
         // Delay to show splash screen
         Handler(Looper.getMainLooper()).postDelayed({
