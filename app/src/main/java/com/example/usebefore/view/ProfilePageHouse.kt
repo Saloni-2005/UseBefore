@@ -48,10 +48,6 @@ class ProfilePageHouse : AppCompatActivity() {
         binding = ActivityProfilePageHouseBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.btnBack.setOnClickListener {
-            startActivity(Intent(this@ProfilePageHouse, HousesHomePage::class.java))
-        }
-
         sharedPreferences = getSharedPreferences("ProfilePrefs" , Context.MODE_PRIVATE)
 
         setupListeners()
@@ -60,14 +56,6 @@ class ProfilePageHouse : AppCompatActivity() {
     }
 
     private fun setupListeners(){
-        binding.btnBack.setOnClickListener {
-            if(isEditMode){
-                showDiscardChangesDialog()
-            }
-            else{
-                finish()
-            }
-        }
 
         binding.btnChangeProfilePic.setOnClickListener {
             if(isEditMode){

@@ -1,364 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.HousesHomePage"
-    >
+    android:fitsSystemWindows="true"
+    tools:openDrawer="start">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:id="@+id/headBar">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Use Before"
-            android:background="#260262"
-            android:textColor="@color/white"
-            android:padding="25dp"
-            android:textSize="35dp"
-            android:textStyle="bold"
-            android:id="@+id/heading"/>
-
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:id="@+id/profileview"
-            android:layout_marginTop="30dp"
-            android:layout_marginRight="15dp"
-            app:cardCornerRadius="22.5dp"
-            android:layout_alignParentRight="true">
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/baseline_person_24"
-                android:id="@+id/profile"/>
-        </com.google.android.material.card.MaterialCardView>
-
-    </RelativeLayout>
-
-    <ScrollView
-        android:id="@+id/scrollContent"
+    <!-- Main Content -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/headBar"
-        android:layout_above="@+id/bottomTabLayout"
-        android:fillViewport="true">
+        android:orientation="vertical">
 
+        <!-- Header that stays across all fragments -->
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="100dp"
+            android:background="#260262"
+            android:id="@+id/headBar">
 
-            <SearchView
+            <TextView
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginHorizontal="10dp"
-                android:queryHint="Search Items..."
-                android:padding="20dp"
-                android:background="@drawable/border"
-                android:id="@+id/search"/>
+                android:layout_height="match_parent"
+                android:text="Use Before"
+                android:background="#260262"
+                android:textColor="@color/white"
+                android:layout_marginLeft="20dp"
+                android:padding="25dp"
+                android:textSize="35dp"
+                android:textStyle="bold"
+                android:id="@+id/heading"/>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="120dp"
-                android:layout_below="@+id/search"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal"
-                android:weightSum="2"
-                android:id="@+id/items">
+            <ImageView
+                android:id="@+id/menu_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="35dp"
+                app:tint="@color/white"
+                android:src="@drawable/baseline_density_medium_24" />
 
-                <com.google.android.material.card.MaterialCardView
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:id="@+id/profileview"
+                android:layout_marginTop="30dp"
+                android:layout_marginRight="15dp"
+                app:cardCornerRadius="22.5dp"
+                android:layout_alignParentRight="true">
+
+                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_margin="10dp"
-                    android:layout_weight="1">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Total Items"
-                        android:padding="10dp"
-                        android:textSize="20dp"
-                        android:textStyle="bold"/>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="40dp"
-                        android:text="0"
-                        android:padding="10dp"
-                        android:textStyle="bold"
-                        android:textColor="#7C36FA"
-                        android:textSize="15dp"/>
-
-                </com.google.android.material.card.MaterialCardView>
-
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="10dp"
-                    android:layout_weight="1">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Expiring Soon"
-                        android:padding="10dp"
-                        android:textSize="20dp"
-                        android:textStyle="bold"/>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="40dp"
-                        android:text="0"
-                        android:padding="10dp"
-                        android:textStyle="bold"
-                        android:textColor="#F44336"
-                        android:textSize="15dp"/>
-
-                </com.google.android.material.card.MaterialCardView>
-
-            </LinearLayout>
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/items"
-                android:layout_centerHorizontal="true"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginTop="10dp"
-                android:id="@+id/view_inventory">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <com.google.android.material.card.MaterialCardView
-                        android:layout_width="45dp"
-                        android:layout_height="45dp"
-                        android:id="@+id/viewicon"
-                        android:layout_marginTop="10dp"
-                        app:cardBackgroundColor="#A2E1FD"
-                        android:layout_marginLeft="10dp"
-                        app:cardCornerRadius="22.5dp">
-
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/baseline_list_24"
-                            android:id="@+id/view"/>
-                    </com.google.android.material.card.MaterialCardView>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="View Inventory"
-                        android:layout_toRightOf="@+id/viewicon"
-                        android:textStyle="bold"
-                        android:textSize="20dp"
-                        android:padding="30dp"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=">"
-                        android:textStyle="bold"
-                        android:textSize="30dp"
-                        android:textColor="#C5C1C1"
-                        android:padding="20dp"
-                        android:layout_alignParentRight="true"/>
-                </RelativeLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/view_inventory"
-                android:layout_centerHorizontal="true"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginTop="20dp"
-                android:id="@+id/add_item">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <com.google.android.material.card.MaterialCardView
-                        android:layout_width="45dp"
-                        android:layout_height="45dp"
-                        android:id="@+id/addicon"
-                        android:layout_marginTop="20dp"
-                        app:cardBackgroundColor="#AAF256"
-                        android:layout_marginLeft="10dp"
-                        app:cardCornerRadius="22.5dp">
-
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/baseline_add_24"
-                            android:id="@+id/add"/>
-                    </com.google.android.material.card.MaterialCardView>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Add New Items"
-                        android:layout_toRightOf="@+id/addicon"
-                        android:textStyle="bold"
-                        android:textSize="20dp"
-                        android:padding="30dp"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=">"
-                        android:textStyle="bold"
-                        android:textSize="30dp"
-                        android:textColor="#C5C1C1"
-                        android:padding="20dp"
-                        android:layout_alignParentRight="true"/>
-                </RelativeLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/add_item"
-                android:layout_centerHorizontal="true"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginTop="20dp"
-                android:id="@+id/alerts">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <com.google.android.material.card.MaterialCardView
-                        android:layout_width="45dp"
-                        android:layout_height="45dp"
-                        android:id="@+id/alerticon"
-                        android:layout_marginTop="20dp"
-                        app:cardBackgroundColor="#F43729"
-                        android:layout_marginLeft="10dp"
-                        app:cardCornerRadius="22.5dp">
-
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/baseline_notifications_24"
-                            android:id="@+id/alertpic"/>
-                    </com.google.android.material.card.MaterialCardView>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Expiry Alerts"
-                        android:layout_toRightOf="@+id/alerticon"
-                        android:textStyle="bold"
-                        android:textSize="20dp"
-                        android:padding="30dp"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=">"
-                        android:textStyle="bold"
-                        android:textSize="30dp"
-                        android:textColor="#C5C1C1"
-                        android:padding="20dp"
-                        android:layout_alignParentRight="true"/>
-                </RelativeLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/alerts"
-                android:layout_centerHorizontal="true"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="10dp"
-                android:id="@+id/settingsview">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <com.google.android.material.card.MaterialCardView
-                        android:layout_width="45dp"
-                        android:layout_height="45dp"
-                        android:id="@+id/settingsicon"
-                        android:layout_marginTop="20dp"
-                        app:cardBackgroundColor="#C2C6C8"
-                        android:layout_marginLeft="10dp"
-                        app:cardCornerRadius="22.5dp">
-
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/baseline_settings_24"
-                            android:id="@+id/settincpic"/>
-                    </com.google.android.material.card.MaterialCardView>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Settings"
-                        android:layout_toRightOf="@+id/settingsicon"
-                        android:textStyle="bold"
-                        android:textSize="20dp"
-                        android:padding="30dp"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=">"
-                        android:textStyle="bold"
-                        android:textSize="30dp"
-                        android:textColor="#C5C1C1"
-                        android:padding="20dp"
-                        android:layout_alignParentRight="true"/>
-                </RelativeLayout>
+                    android:src="@drawable/baseline_person_24"
+                    android:id="@+id/profile"/>
             </com.google.android.material.card.MaterialCardView>
         </RelativeLayout>
-    </ScrollView>
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/bottomTabLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="#260262"
-        app:tabIndicatorColor="#FFFFFF"
-        app:tabSelectedTextColor="#FFFFFF"
-        app:tabTextColor="#CCCCCC"
-        app:tabIconTint="@color/white"
-        app:tabMode="fixed">
+        <!-- Fragment container for all content below the header -->
+        <FrameLayout
+            android:id="@+id/fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:icon="@drawable/baseline_home_24"
-            android:text="Home" />
+    </LinearLayout>
 
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:icon="@drawable/baseline_add_24"
-            android:text="Subscription" />
+    <!-- Navigation Drawer -->
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/nav_header"
+        app:menu="@menu/nav_menu" />
 
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:icon="@drawable/baseline_notifications_24"
-            android:text="Notifications" />
-    </com.google.android.material.tabs.TabLayout>
-
-</RelativeLayout>
+</androidx.drawerlayout.widget.DrawerLayout>
