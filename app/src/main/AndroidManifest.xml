@@ -26,6 +26,9 @@
         android:theme="@style/Theme.UseBefore"
         tools:targetApi="31">
         <activity
+            android:name=".view.AddItemsActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.BarcodeScannerActivity"
             android:exported="false" />
         <activity

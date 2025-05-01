@@ -21,7 +21,6 @@ class HousesHomePage : AppCompatActivity() {
     private lateinit var actionBarDrawerToggle: ActionBarDrawerToggle
     private lateinit var navigationView: NavigationView
     private lateinit var menuIcon: ImageView
-
     private lateinit var binding: ActivityHousesHomePageBinding
 
     @SuppressLint("ResourceType")

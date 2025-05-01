@@ -34,7 +34,7 @@ class HomeFragment : Fragment() {
         }
 
         view.findViewById<MaterialCardView>(R.id.add_item).setOnClickListener {
-            // Handle add item
+            startActivity(Intent(requireContext(), AddItemsActivity::class.java))
         }
 
         view.findViewById<MaterialCardView>(R.id.alerts).setOnClickListener {
