@@ -45,24 +45,31 @@ class InventoryRecyclerAdapter(
                 else -> "$daysUntilExpiry days remaining"
             }
 
-            // Set expiry indicator color if active
+            // Set text color based on expiry status
             if (item.status == ItemStatus.ACTIVE) {
                 when (item.getExpiryAlertColor()) {
                     ExpiryAlertColor.RED -> {
-                        binding.expiryIndicator.setBackgroundColor(0xFFFF0000.toInt())
-                        binding.expiryIndicator.visibility = View.VISIBLE
+                        binding.expiryStatusTextView.setTextColor(0xFFFF0000.toInt())
+                        binding.expiryDateTextView.setTextColor(0xFFFF0000.toInt())
                     }
                     ExpiryAlertColor.ORANGE -> {
-                        binding.expiryIndicator.setBackgroundColor(0xFFFF8800.toInt())
-                        binding.expiryIndicator.visibility = View.VISIBLE
+                        binding.expiryStatusTextView.setTextColor(0xFFFF8800.toInt())
+                        binding.expiryDateTextView.setTextColor(0xFFFF8800.toInt())
                     }
                     ExpiryAlertColor.YELLOW -> {
-                        binding.expiryIndicator.setBackgroundColor(0xFFFFFF00.toInt())
-                        binding.expiryIndicator.visibility = View.VISIBLE
+                        binding.expiryStatusTextView.setTextColor(0xFFFFFF00.toInt())
+                        binding.expiryDateTextView.setTextColor(0xFFFFFF00.toInt())
                     }
-                    else -> binding.expiryIndicator.visibility = View.GONE
+                    else -> {
+                        binding.expiryStatusTextView.setTextColor(0xFF000000.toInt()) // Default black
+                        binding.expiryDateTextView.setTextColor(0xFF000000.toInt()) // Default black
+                    }
                 }
+                // Always hide the indicator line
+                binding.expiryIndicator.visibility = View.GONE
             } else {
+                binding.expiryStatusTextView.setTextColor(0xFF000000.toInt()) // Default black
+                binding.expiryDateTextView.setTextColor(0xFF000000.toInt()) // Default black
                 binding.expiryIndicator.visibility = View.GONE
             }
 
