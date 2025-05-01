@@ -24,7 +24,7 @@ class HomeFragment : Fragment() {
 
         // Set up click listeners for your cards
         view.findViewById<MaterialCardView>(R.id.view_inventory).setOnClickListener {
-            // Handle inventory view
+            startActivity(Intent(requireContext() , ViewInventoryActivity::class.java))
         }
 
         val scanBarcodeCard = view.findViewById<MaterialCardView>(R.id.scan_barcode)
