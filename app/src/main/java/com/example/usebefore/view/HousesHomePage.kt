@@ -8,12 +8,14 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.example.usebefore.databinding.ActivityHousesHomePageBinding
 import com.google.android.material.navigation.NavigationView
+import android.app.AlertDialog
 
 class HousesHomePage : AppCompatActivity() {
 
@@ -34,7 +36,6 @@ class HousesHomePage : AppCompatActivity() {
         navigationView = binding.navView
         menuIcon = binding.menuIcon
 
-        // Setup navigation drawer item selection
         navigationView.setNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 com.example.usebefore.R.id.nav_home -> {
@@ -66,23 +67,20 @@ class HousesHomePage : AppCompatActivity() {
                     true
                 }
                 com.example.usebefore.R.id.nav_logout -> {
-                    // Implement logout logic
+                    showLogoutConfirmationDialog()
                     true
                 }
                 else -> false
             }
 
-            // Close drawer after selection
             drawerLayout.closeDrawer(GravityCompat.START)
             true
         }
 
-        // Set click listener for menu icon
         menuIcon.setOnClickListener {
             drawerLayout.openDrawer(GravityCompat.START)
         }
 
-        // Load initial fragment if it's first launch
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(com.example.usebefore.R.id.fragment_container, HomeFragment())
@@ -98,7 +96,6 @@ class HousesHomePage : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        // Close drawer on back press if open
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START)
         } else {
@@ -106,7 +103,6 @@ class HousesHomePage : AppCompatActivity() {
         }
     }
 
-    // In HousesHomePage.kt
     private fun loadProfileImage() {
         val sharedPreferences = getSharedPreferences("ProfilePrefs", Context.MODE_PRIVATE)
         val profileImageUriString = sharedPreferences.getString("profileImageUri", null)
@@ -116,7 +112,6 @@ class HousesHomePage : AppCompatActivity() {
         if (profileImageUriString != null) {
             try {
                 val profileImageUri = Uri.parse(profileImageUriString)
-                // Take a content URI permission to ensure persistence
                 try {
                     contentResolver.takePersistableUriPermission(
                         profileImageUri,
@@ -124,7 +119,6 @@ class HousesHomePage : AppCompatActivity() {
                     )
                 } catch (e: Exception) {
                     android.util.Log.e("HousesHomePage", "Failed to take permission: ${e.message}")
-                    // Continue anyway, might still work
                 }
 
                 val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, profileImageUri)
@@ -139,6 +133,36 @@ class HousesHomePage : AppCompatActivity() {
             android.util.Log.d("HousesHomePage", "No saved profile image URI found, using default")
             binding.profile.setImageResource(com.example.usebefore.R.drawable.baseline_person_24)
         }
+    }
+
+    private fun showLogoutConfirmationDialog() {
+        AlertDialog.Builder(this)
+            .setTitle("Logout")
+            .setMessage("Are you sure you want to logout?")
+            .setPositiveButton("Yes") { _, _ ->
+                logout()
+            }
+            .setNegativeButton("No") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
+    }
+
+    private fun logout() {
+        val sharedPreferences = getSharedPreferences("ProfilePrefs", Context.MODE_PRIVATE)
+
+        sharedPreferences.edit().apply {
+            putBoolean("isLoggedIn", false)
+            apply()
+        }
+
+        Toast.makeText(this, "Logged out successfully", Toast.LENGTH_SHORT).show()
+
+        val intent = Intent(this, LoginHouses::class.java)
+        // Clear back stack so user can't go back to the home page after logout
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        finish()
     }
 
     override fun onResume() {

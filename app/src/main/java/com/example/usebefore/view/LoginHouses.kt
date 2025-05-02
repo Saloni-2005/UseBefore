@@ -1,12 +1,12 @@
 package com.example.usebefore.view
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.biometric.BiometricManager
-import androidx.biometric.BiometricPrompt
-import androidx.core.content.ContextCompat
 import com.example.usebefore.databinding.ActivityLoginHousesBinding
 import com.example.usebefore.repository.HouseUsers
 import com.google.firebase.database.DataSnapshot
@@ -45,69 +45,45 @@ class LoginHouses : AppCompatActivity() {
             startActivity(Intent(this, SignupHouses::class.java))
             finish()
         }
-
-        val biometricManager = BiometricManager.from(this)
-        when(biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG)){
-            BiometricManager.BIOMETRIC_SUCCESS -> {
-                binding.fingerprint.setOnClickListener {
-                    authenticate()
-                }
-            }
-            BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE,
-                BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE,
-                BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED -> {
-                    Toast.makeText(this , "Biometric not matched" , Toast.LENGTH_LONG).show()
-                }
-        }
-    }
-
-    private fun authenticate(){
-        val executor = ContextCompat.getMainExecutor(this)
-        val bioometricPrompt = BiometricPrompt(this , executor , object : BiometricPrompt.AuthenticationCallback(){
-            override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
-                super.onAuthenticationSucceeded(result)
-                Toast.makeText(applicationContext , "Fingerprint Authentication Successful" , Toast.LENGTH_SHORT).show()
-                startActivity(Intent(applicationContext , HousesHomePage::class.java))
-                finish()
-            }
-
-            override fun onAuthenticationFailed() {
-                super.onAuthenticationFailed()
-                Toast.makeText(applicationContext ,"Finger not matched" , Toast.LENGTH_LONG).show()
-            }
-
-            override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
-                super.onAuthenticationError(errorCode, errString)
-                Toast.makeText(applicationContext , "Clean Sensor / fetal error : $errString" , Toast.LENGTH_LONG ).show()
-            }
-        })
-
-        val promptInfo = BiometricPrompt.PromptInfo.Builder()
-            .setTitle("Biometric Authentication")
-            .setSubtitle("Login using fingerprint")
-            .setNegativeButtonText("Cancel")
-            .build()
-
-        bioometricPrompt.authenticate(promptInfo)
     }
 
     private fun validateLogin(username: String, password: String) {
+
         databaseReference.orderByChild("userName").equalTo(username).addListenerForSingleValueEvent(object :
             ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
+
                 if(snapshot.exists()){
                     for(userSnapshot in snapshot.children) {
                         val userData = userSnapshot.getValue(HouseUsers::class.java)
+
                         if (userData != null && userData.password == password) {
+                            val sharedPreferences = getSharedPreferences("ProfilePrefs", Context.MODE_PRIVATE)
+
+                            val previousUser = sharedPreferences.getString("lastLoggedInUser", "")
+                            val isNewUser = previousUser != username
+
+                            val editor = sharedPreferences.edit()
+                            editor.putBoolean("isLoggedIn", true)
+                            editor.putString("username", userData.userName)
+
+                            if (isNewUser) {
+                                userData.userName?.let { resetProfileData(editor, it) }
+                            }
+
+                            editor.putString("lastLoggedInUser", username)
+                            editor.apply()
+
                             Toast.makeText(applicationContext, "Login Successful", Toast.LENGTH_SHORT).show()
                             startActivity(Intent(this@LoginHouses, HousesHomePage::class.java))
                             finish()
                             return
                         }
                     }
+                    Toast.makeText(this@LoginHouses, "Invalid password", Toast.LENGTH_SHORT).show()
                 }
                 else{
-                    Toast.makeText(this@LoginHouses, "Invalid Credentials", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@LoginHouses, "Username not found", Toast.LENGTH_SHORT).show()
                 }
             }
 
@@ -117,5 +93,28 @@ class LoginHouses : AppCompatActivity() {
         })
     }
 
+    private fun resetProfileData(editor: SharedPreferences.Editor, username: String) {
+        // Clear personal information but keep system settings
+        editor.putString("email", "")
+        editor.putString("phone", "")
+        editor.putString("location", "")
+        editor.putString("profileImageUri", null)
 
+        // Set default values for a new user
+        editor.putBoolean("isPremium", false)
+
+        val sharedPreferences = getSharedPreferences("ProfilePrefs", Context.MODE_PRIVATE)
+
+        if (!sharedPreferences.contains("notifications")) {
+            editor.putBoolean("notifications", true) // Default ON
+        }
+
+        if (!sharedPreferences.contains("darkMode")) {
+            editor.putBoolean("darkMode", false) // Default OFF
+        }
+
+        if (!sharedPreferences.contains("fingerprintEnabled")) {
+            editor.putBoolean("fingerprintEnabled", false) // Default OFF
+        }
+    }
 }

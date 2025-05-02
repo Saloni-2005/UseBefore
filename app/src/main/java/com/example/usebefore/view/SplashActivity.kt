@@ -13,8 +13,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.example.usebefore.R
 
 class SplashActivity : AppCompatActivity() {
@@ -28,32 +26,30 @@ class SplashActivity : AppCompatActivity() {
         logoImageView.startAnimation(animation)
 
         val sharedPreferences = getSharedPreferences("ProfilePrefs", Context.MODE_PRIVATE)
-//        val isFingerprintEnabled = sharedPreferences.getBoolean("fingerprintEnabled", false)
-        val isFingerprintEnabled = true
+        val isUserLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
+        val isFingerprintEnabled = sharedPreferences.getBoolean("fingerprintEnabled", false)
 
-        // Delay to show splash screen
         Handler(Looper.getMainLooper()).postDelayed({
-            if (isFingerprintEnabled) {
-                // Check biometric availability
+            if (!isUserLoggedIn) {
+                startActivity(Intent(this, LoginHouses::class.java))
+                finish()
+            } else if (isUserLoggedIn && isFingerprintEnabled) {
                 val biometricManager = BiometricManager.from(this)
                 when (biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG)) {
                     BiometricManager.BIOMETRIC_SUCCESS -> {
-                        // Device supports biometric and has fingerprints enrolled
                         authenticate()
                     }
                     else -> {
-                        // Skip authentication if biometric not available and go directly to home
                         Toast.makeText(this, "Biometric authentication unavailable", Toast.LENGTH_SHORT).show()
                         startActivity(Intent(this, HousesHomePage::class.java))
                         finish()
                     }
                 }
             } else {
-                // If fingerprint is not enabled, go directly to home
                 startActivity(Intent(this, HousesHomePage::class.java))
                 finish()
             }
-        }, 1500) // Show splash screen for 1.5 seconds
+        }, 1500)
     }
 
     private fun authenticate() {
@@ -73,15 +69,29 @@ class SplashActivity : AppCompatActivity() {
 
             override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
                 super.onAuthenticationError(errorCode, errString)
-                Toast.makeText(applicationContext, "Clean Sensor / fatal error: $errString", Toast.LENGTH_LONG).show()
 
-                // If there's an error (like user cancellation), still allow them to proceed to the app
-                // This prevents the user from being locked out completely
-                if (errorCode == BiometricPrompt.ERROR_NEGATIVE_BUTTON ||
-                    errorCode == BiometricPrompt.ERROR_USER_CANCELED) {
-                    Toast.makeText(applicationContext, "Authentication cancelled", Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(applicationContext, HousesHomePage::class.java))
-                    finish()
+                when (errorCode) {
+                    BiometricPrompt.ERROR_NEGATIVE_BUTTON,
+                    BiometricPrompt.ERROR_USER_CANCELED -> {
+                        Toast.makeText(applicationContext, "Authentication cancelled", Toast.LENGTH_SHORT).show()
+                        startActivity(Intent(applicationContext, LoginHouses::class.java))
+                        finish()
+                    }
+                    BiometricPrompt.ERROR_LOCKOUT,
+                    BiometricPrompt.ERROR_LOCKOUT_PERMANENT -> {
+                        Toast.makeText(applicationContext,
+                            "Too many failed attempts. Please login with password",
+                            Toast.LENGTH_LONG).show()
+                        startActivity(Intent(applicationContext, LoginHouses::class.java))
+                        finish()
+                    }
+                    else -> {
+                        Toast.makeText(applicationContext,
+                            "Authentication error: $errString",
+                            Toast.LENGTH_LONG).show()
+                        startActivity(Intent(applicationContext, LoginHouses::class.java))
+                        finish()
+                    }
                 }
             }
         })
@@ -89,7 +99,7 @@ class SplashActivity : AppCompatActivity() {
         val promptInfo = BiometricPrompt.PromptInfo.Builder()
             .setTitle("Biometric Authentication")
             .setSubtitle("Login using fingerprint")
-            .setNegativeButtonText("Cancel")
+            .setNegativeButtonText("Use Password Instead")
             .build()
 
         biometricPrompt.authenticate(promptInfo)

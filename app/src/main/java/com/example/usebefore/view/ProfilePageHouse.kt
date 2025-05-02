@@ -73,14 +73,14 @@ class ProfilePageHouse : AppCompatActivity() {
                 showSaveChangesDialog()
             }
         }
-//
-//        binding.switchNotifications.setOnClickListener { _, isChecked ->
+
+//        binding.switchNotifications.setOnClickListener {
 //            if(isEditMode){
 //
 //            }
 //        }
 //
-//        binding.switchDarkMode.setOnClickListener { _, isChecked ->
+//        binding.switchDarkMode.setOnClickListener {
 //            if(isEditMode){
 //
 //            }
@@ -88,10 +88,10 @@ class ProfilePageHouse : AppCompatActivity() {
 
         binding.switchFingerprint.setOnClickListener {
             if (isEditMode) {
-                // Check if device supports biometric authentication
-                checkBiometricSupport()
+                if (binding.switchFingerprint.isChecked) {
+                    checkBiometricSupport()
+                }
             } else {
-                // Reset to original value if not in edit mode
                 binding.switchFingerprint.isChecked = sharedPreferences.getBoolean("fingerprintEnabled", false)
                 Toast.makeText(this, "Enable edit mode to change settings", Toast.LENGTH_SHORT).show()
             }
@@ -102,8 +102,6 @@ class ProfilePageHouse : AppCompatActivity() {
         val biometricManager = BiometricManager.from(this)
         when (biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG)) {
             BiometricManager.BIOMETRIC_SUCCESS -> {
-                // Device supports biometric authentication and has biometrics enrolled
-                // Continue with enabling the feature
                 return
             }
             BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE -> {
@@ -137,6 +135,7 @@ class ProfilePageHouse : AppCompatActivity() {
         binding.txtMembershipStatus.text = if (isPremium) "Premium Member" else "Not a Premium Member"
 
         // Load preferences
+        binding.switchFingerprint.isChecked = sharedPreferences.getBoolean("fingerprintEnabled", false)
         binding.switchNotifications.isChecked = sharedPreferences.getBoolean("notifications", true)
         binding.switchDarkMode.isChecked = sharedPreferences.getBoolean("darkMode", false)
 
@@ -149,7 +148,6 @@ class ProfilePageHouse : AppCompatActivity() {
                 binding.profileImage.setImageBitmap(bitmap)
             } catch (e: Exception) {
                 e.printStackTrace()
-                // Use default image if loading fails
             }
         }
     }
@@ -157,18 +155,15 @@ class ProfilePageHouse : AppCompatActivity() {
     private fun enableEditMode() {
         isEditMode = true
 
-        // Store original values in case user cancels
         originalValues["username"] = binding.txtUsername.text.toString()
         originalValues["email"] = binding.txtEmail.text.toString()
         originalValues["phone"] = binding.txtPhone.text.toString()
         originalValues["location"] = binding.txtLocation.text.toString()
 
-        // Enable editing fields
         binding.txtEmail.isEnabled = true
         binding.txtPhone.isEnabled = true
         binding.txtLocation.isEnabled = true
 
-        // Change button text
         binding.btnEditProfile.text = "Save Changes"
 
         Toast.makeText(this, "Edit mode enabled", Toast.LENGTH_SHORT).show()
@@ -213,7 +208,7 @@ class ProfilePageHouse : AppCompatActivity() {
         // Save preferences
         editor.putBoolean("notifications", binding.switchNotifications.isChecked)
         editor.putBoolean("darkMode", binding.switchDarkMode.isChecked)
-
+        editor.putBoolean("fingerprintEnabled", binding.switchFingerprint.isChecked)
         // Save profile image URI if changed
         tempProfileUri?.let {
             editor.putString("profileImageUri", it.toString())
@@ -221,7 +216,6 @@ class ProfilePageHouse : AppCompatActivity() {
 
         editor.apply()
 
-        // Update the username text view
         binding.txtUsername.text = username
 
         disableEditMode()
@@ -229,16 +223,13 @@ class ProfilePageHouse : AppCompatActivity() {
     }
 
     private fun discardChanges() {
-        // Restore original values
         binding.txtUsername.text = originalValues["username"]
         binding.txtEmail.setText(originalValues["email"])
         binding.txtPhone.setText(originalValues["phone"])
         binding.txtLocation.setText(originalValues["location"])
 
-        // Reset temp profile image
         tempProfileUri = null
 
-        // Reload profile image from SharedPreferences
         val profileImageUriString = sharedPreferences.getString("profileImageUri", null)
         if (profileImageUriString != null) {
             try {
@@ -247,10 +238,8 @@ class ProfilePageHouse : AppCompatActivity() {
                 binding.profileImage.setImageBitmap(bitmap)
             } catch (e: Exception) {
                 e.printStackTrace()
-                // Use default image if loading fails
             }
         } else {
-            // Set default image
             binding.profileImage.setImageResource(R.drawable.profile_placeholder)
         }
 
