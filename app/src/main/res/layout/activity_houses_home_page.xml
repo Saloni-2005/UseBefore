@@ -19,7 +19,7 @@
         <!-- Header that stays across all fragments -->
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="80dp"
             android:background="#260262"
             android:id="@+id/headBar">
 
@@ -30,8 +30,8 @@
                 android:background="#260262"
                 android:textColor="@color/white"
                 android:layout_marginLeft="20dp"
-                android:padding="25dp"
-                android:textSize="35dp"
+                android:padding="23dp"
+                android:textSize="30dp"
                 android:textStyle="bold"
                 android:id="@+id/heading"/>
 
@@ -40,7 +40,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
-                android:layout_marginTop="35dp"
+                android:layout_marginTop="29dp"
                 app:tint="@color/white"
                 android:src="@drawable/baseline_density_medium_24" />
 
@@ -48,7 +48,7 @@
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:id="@+id/profileview"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginRight="15dp"
                 app:cardCornerRadius="22.5dp"
                 android:layout_alignParentRight="true">

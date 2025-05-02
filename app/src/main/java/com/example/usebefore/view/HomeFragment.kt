@@ -38,7 +38,7 @@ class HomeFragment : Fragment() {
         }
 
         view.findViewById<MaterialCardView>(R.id.alerts).setOnClickListener {
-            // Handle alerts
+            startActivity(Intent(requireContext(), ExpiryAlertsActivity::class.java))
         }
 
         view.findViewById<MaterialCardView>(R.id.settingsview).setOnClickListener {
