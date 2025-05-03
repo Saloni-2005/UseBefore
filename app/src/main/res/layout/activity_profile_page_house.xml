@@ -5,13 +5,14 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F8F8F8"
     tools:context=".view.ProfilePageHouse">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <!-- Header -->
+        <!-- Header - Kept the same as requested -->
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -28,263 +29,384 @@
                 android:textStyle="bold" />
         </androidx.appcompat.widget.Toolbar>
 
-        <!-- Main Content Card -->
+        <!-- Profile Picture Section - Kept the same as requested -->
         <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            app:cardCornerRadius="10dp"
-            android:background="@drawable/border"
+            android:id="@+id/profileImageContainer"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="24dp"
+            app:cardCornerRadius="50dp"
             app:cardElevation="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbar">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <ImageView
+                android:id="@+id/profileImage"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/profile_placeholder" />
+        </androidx.cardview.widget.CardView>
+
+        <!-- Camera Icon for changing profile picture -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnChangeProfilePic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="-12dp"
+            android:layout_marginBottom="-6dp"
+            android:backgroundTint="#260262"
+            android:contentDescription="Change profile picture"
+            android:src="@drawable/ic_camera"
+            app:fabSize="mini"
+            app:layout_constraintBottom_toBottomOf="@id/profileImageContainer"
+            app:layout_constraintEnd_toEndOf="@id/profileImageContainer"
+            app:tint="@android:color/white" />
+
+        <!-- User Name and Membership -->
+        <TextView
+            android:id="@+id/txtUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Add your username"
+            android:textColor="#260262"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/profileImageContainer" />
+
+        <TextView
+            android:id="@+id/txtMembershipStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Not a Premium Member"
+            android:textColor="#666666"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txtUsername" />
+
+        <!-- Account Information Card -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/accountInfoCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="2dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txtMembershipStatus">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
                 android:padding="16dp">
 
-                <!-- Profile Picture -->
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/profileImageContainer"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_marginTop="16dp"
-                    app:cardCornerRadius="50dp"
-                    app:cardElevation="2dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
                     <ImageView
-                        android:id="@+id/profileImage"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@android:drawable/ic_menu_info_details"
+                        android:tint="#260262" />
+
+                    <TextView
+                        android:id="@+id/txtAccountInfoHeader"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="1"
+                        android:text="Account Information"
+                        android:textColor="#260262"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <!-- Email Field - Two versions for view/edit modes -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Email"
+                        android:textColor="#666666"
+                        android:textSize="14sp" />
+
+                    <!-- View Mode (Visible when not in edit mode) -->
+                    <TextView
+                        android:id="@+id/txtEmailDisplay"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/profile_placeholder" />
-                </androidx.cardview.widget.CardView>
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:paddingVertical="8dp"
+                        android:text=""
+                        android:textColor="#333333"
+                        android:textSize="16sp" />
 
-                <!-- Camera Icon for changing profile picture -->
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/btnChangeProfilePic"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="-12dp"
-                    android:layout_marginBottom="-6dp"
-                    android:backgroundTint="#260262"
-                    android:contentDescription="Change profile picture"
-                    android:src="@drawable/ic_camera"
-                    app:fabSize="mini"
-                    app:layout_constraintBottom_toBottomOf="@id/profileImageContainer"
-                    app:layout_constraintEnd_toEndOf="@id/profileImageContainer"
-                    app:tint="@android:color/white" />
-
-                <!-- User Name Display -->
-                <TextView
-                    android:id="@+id/txtUsername"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="Add your username"
-                    android:textColor="#260262"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/profileImageContainer" />
-
-                <TextView
-                    android:id="@+id/txtMembershipStatus"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="Not a Premium Member"
-                    android:textColor="#666666"
-                    android:textSize="14sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/txtUsername" />
-
-                <!-- Section Divider 1 -->
-                <View
-                    android:id="@+id/divider1"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="16dp"
-                    android:background="#DDDDDD"
-                    app:layout_constraintTop_toBottomOf="@id/txtMembershipStatus" />
-
-                <!-- Account Information Section -->
-                <TextView
-                    android:id="@+id/txtAccountInfoHeader"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="Account Information"
-                    android:textColor="#260262"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    app:layout_constraintTop_toBottomOf="@id/divider1" />
-
-                <!-- Email Field -->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/emailLayout"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:hint="Email"
-                    app:boxBackgroundColor="#F5F5F5"
-                    app:layout_constraintTop_toBottomOf="@id/txtAccountInfoHeader">
-
-                    <com.google.android.material.textfield.TextInputEditText
+                    <!-- Edit Mode (Hidden initially) -->
+                    <EditText
                         android:id="@+id/txtEmail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:enabled="false"
+                        android:layout_marginTop="4dp"
+                        android:background="@android:drawable/editbox_background"
                         android:inputType="textEmailAddress"
-                        />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:padding="12dp"
+                        android:textColor="#333333"
+                        android:textSize="16sp"
+                        android:visibility="gone" />
 
-                <!-- Phone Field -->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/phoneLayout"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="8dp"
+                        android:background="#E0E0E0" />
+                </LinearLayout>
+
+                <!-- Phone Field - Two versions for view/edit modes -->
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:hint="Phone"
-                    app:boxBackgroundColor="#F5F5F5"
-                    app:layout_constraintTop_toBottomOf="@id/emailLayout">
+                    android:layout_marginTop="16dp"
+                    android:orientation="vertical">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Phone"
+                        android:textColor="#666666"
+                        android:textSize="14sp" />
+
+                    <!-- View Mode (Visible when not in edit mode) -->
+                    <TextView
+                        android:id="@+id/txtPhoneDisplay"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:paddingVertical="8dp"
+                        android:text=""
+                        android:textColor="#333333"
+                        android:textSize="16sp" />
+
+                    <!-- Edit Mode (Hidden initially) -->
+                    <EditText
                         android:id="@+id/txtPhone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:enabled="false"
-                        android:inputType="phone"/>
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:layout_marginTop="4dp"
+                        android:background="@android:drawable/editbox_background"
+                        android:inputType="phone"
+                        android:padding="12dp"
+                        android:textColor="#333333"
+                        android:textSize="16sp"
+                        android:visibility="gone" />
 
-                <!-- Location Field -->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/locationLayout"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="8dp"
+                        android:background="#E0E0E0" />
+                </LinearLayout>
+
+                <!-- Location Field - Two versions for view/edit modes -->
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:hint="Location"
-                    app:boxBackgroundColor="#F5F5F5"
-                    app:layout_constraintTop_toBottomOf="@id/phoneLayout">
+                    android:layout_marginTop="16dp"
+                    android:orientation="vertical">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Location"
+                        android:textColor="#666666"
+                        android:textSize="14sp" />
+
+                    <!-- View Mode (Visible when not in edit mode) -->
+                    <TextView
+                        android:id="@+id/txtLocationDisplay"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:paddingVertical="8dp"
+                        android:text=""
+                        android:textColor="#333333"
+                        android:textSize="16sp" />
+
+                    <!-- Edit Mode (Hidden initially) -->
+                    <EditText
                         android:id="@+id/txtLocation"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:enabled="false"
-                        android:inputType="text" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:layout_marginTop="4dp"
+                        android:background="@android:drawable/editbox_background"
+                        android:inputType="text"
+                        android:padding="12dp"
+                        android:textColor="#333333"
+                        android:textSize="16sp"
+                        android:visibility="gone" />
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
-                <!-- Section Divider 2 -->
-                <View
-                    android:id="@+id/divider2"
+        <!-- App Preferences Card -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/appPreferencesCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="2dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/accountInfoCard">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="16dp"
-                    android:background="#DDDDDD"
-                    app:layout_constraintTop_toBottomOf="@id/locationLayout" />
-
-                <!-- App Preferences Section -->
-                <TextView
-                    android:id="@+id/txtAppPreferencesHeader"
-                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="App Preferences"
-                    android:textColor="#260262"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    app:layout_constraintTop_toBottomOf="@id/divider2" />
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
-                <!-- Notifications Toggle -->
-                <TextView
-                    android:id="@+id/txtNotificationsLabel"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="Push Notifications"
-                    android:textSize="16sp"
-                    app:layout_constraintEnd_toStartOf="@id/switchNotifications"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/txtAppPreferencesHeader" />
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@android:drawable/ic_menu_preferences"
+                        app:tint="#260262" />
 
-                <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/switchNotifications"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checked="true"
-                    app:layout_constraintBottom_toBottomOf="@id/txtNotificationsLabel"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/txtNotificationsLabel" />
+                    <TextView
+                        android:id="@+id/txtAppPreferencesHeader"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="1"
+                        android:text="App Preferences"
+                        android:textColor="#260262"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
 
                 <!-- Dark Mode Toggle -->
-                <TextView
-                    android:id="@+id/txtDarkModeLabel"
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="Dark Mode"
-                    android:textSize="16sp"
-                    app:layout_constraintEnd_toStartOf="@id/switchDarkMode"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/txtNotificationsLabel" />
+                    android:layout_marginTop="8dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingVertical="8dp">
 
-                <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/switchDarkMode"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checked="false"
-                    app:layout_constraintBottom_toBottomOf="@id/txtDarkModeLabel"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/txtDarkModeLabel" />
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="4dp"
+                        android:src="@android:drawable/ic_menu_day"
+                        app:tint="#666666" />
 
-                <TextView
-                    android:id="@+id/txtFingerprintLabel"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="Fingerprint Verification"
-                    android:textSize="16sp"
-                    app:layout_constraintEnd_toStartOf="@id/switchFingerprint"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/txtDarkModeLabel" />
+                    <TextView
+                        android:id="@+id/txtDarkModeLabel"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_weight="1"
+                        android:text="Dark Mode"
+                        android:textColor="#333333"
+                        android:textSize="16sp" />
 
-                <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/switchFingerprint"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checked="false"
-                    app:layout_constraintBottom_toBottomOf="@id/txtFingerprintLabel"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/txtFingerprintLabel" />
-                <!-- Edit Profile Button -->
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnEditProfile"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="32dp"
-                    android:layout_marginTop="20dp"
-                    android:backgroundTint="#260262"
-                    android:padding="12dp"
-                    android:text="Edit Profile"
-                    android:textAllCaps="false"
-                    android:textSize="16sp"
-                    app:cornerRadius="25dp"
-                    android:layout_marginBottom="15dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/txtFingerprintLabel" />
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/switchDarkMode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="false" />
+                </LinearLayout>
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="6dp"
+                    android:background="#E0E0E0" />
+
+                <!-- Fingerprint Toggle -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingVertical="8dp">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="4dp"
+                        android:src="@android:drawable/ic_lock_lock"
+                        app:tint="#666666" />
+
+                    <TextView
+                        android:id="@+id/txtFingerprintLabel"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_weight="1"
+                        android:text="Fingerprint Verification"
+                        android:textColor="#333333"
+                        android:textSize="16sp" />
+
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/switchFingerprint"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="false" />
+                </LinearLayout>
+            </LinearLayout>
         </androidx.cardview.widget.CardView>
+
+        <!-- Edit Profile Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnEditProfile"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="32dp"
+            android:backgroundTint="#260262"
+            android:padding="14dp"
+            android:text="Edit Profile"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            app:cornerRadius="25dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/appPreferencesCard" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

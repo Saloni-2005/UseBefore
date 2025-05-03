@@ -8,6 +8,7 @@ import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.view.View
 import android.widget.Toast
 import androidx.biometric.BiometricPrompt
 import androidx.biometric.BiometricManager
@@ -74,18 +75,6 @@ class ProfilePageHouse : AppCompatActivity() {
             }
         }
 
-//        binding.switchNotifications.setOnClickListener {
-//            if(isEditMode){
-//
-//            }
-//        }
-//
-//        binding.switchDarkMode.setOnClickListener {
-//            if(isEditMode){
-//
-//            }
-//        }
-
         binding.switchFingerprint.setOnClickListener {
             if (isEditMode) {
                 if (binding.switchFingerprint.isChecked) {
@@ -123,23 +112,30 @@ class ProfilePageHouse : AppCompatActivity() {
         }
     }
 
-
     private fun loadUserDetails(){
         binding.txtUsername.text = sharedPreferences.getString("username", "Add your username")
-        binding.txtEmail.setText(sharedPreferences.getString("email", ""))
-        binding.txtPhone.setText(sharedPreferences.getString("phone", ""))
-        binding.txtLocation.setText(sharedPreferences.getString("location", ""))
-
-        // Load premium status
         val isPremium = sharedPreferences.getBoolean("isPremium", false)
         binding.txtMembershipStatus.text = if (isPremium) "Premium Member" else "Not a Premium Member"
 
+        // Load account information data
+        val email = sharedPreferences.getString("email", "")
+        val phone = sharedPreferences.getString("phone", "")
+        val location = sharedPreferences.getString("location", "")
+
+        // Set to both display and edit fields
+        binding.txtEmail.setText(email)
+        binding.txtEmailDisplay.text = email
+
+        binding.txtPhone.setText(phone)
+        binding.txtPhoneDisplay.text = phone
+
+        binding.txtLocation.setText(location)
+        binding.txtLocationDisplay.text = location
+
         // Load preferences
         binding.switchFingerprint.isChecked = sharedPreferences.getBoolean("fingerprintEnabled", false)
-        binding.switchNotifications.isChecked = sharedPreferences.getBoolean("notifications", true)
         binding.switchDarkMode.isChecked = sharedPreferences.getBoolean("darkMode", false)
 
-        // Load profile image if available
         val profileImageUriString = sharedPreferences.getString("profileImageUri", null)
         if (profileImageUriString != null) {
             try {
@@ -156,13 +152,18 @@ class ProfilePageHouse : AppCompatActivity() {
         isEditMode = true
 
         originalValues["username"] = binding.txtUsername.text.toString()
-        originalValues["email"] = binding.txtEmail.text.toString()
-        originalValues["phone"] = binding.txtPhone.text.toString()
-        originalValues["location"] = binding.txtLocation.text.toString()
+        originalValues["email"] = binding.txtEmailDisplay.text.toString()
+        originalValues["phone"] = binding.txtPhoneDisplay.text.toString()
+        originalValues["location"] = binding.txtLocationDisplay.text.toString()
 
-        binding.txtEmail.isEnabled = true
-        binding.txtPhone.isEnabled = true
-        binding.txtLocation.isEnabled = true
+        binding.txtEmailDisplay.visibility = View.GONE
+        binding.txtEmail.visibility = View.VISIBLE
+
+        binding.txtPhoneDisplay.visibility = View.GONE
+        binding.txtPhone.visibility = View.VISIBLE
+
+        binding.txtLocationDisplay.visibility = View.GONE
+        binding.txtLocation.visibility = View.VISIBLE
 
         binding.btnEditProfile.text = "Save Changes"
 
@@ -172,12 +173,15 @@ class ProfilePageHouse : AppCompatActivity() {
     private fun disableEditMode() {
         isEditMode = false
 
-        // Disable editing fields
-        binding.txtEmail.isEnabled = false
-        binding.txtPhone.isEnabled = false
-        binding.txtLocation.isEnabled = false
+        binding.txtEmailDisplay.visibility = View.VISIBLE
+        binding.txtEmail.visibility = View.GONE
 
-        // Change button text back
+        binding.txtPhoneDisplay.visibility = View.VISIBLE
+        binding.txtPhone.visibility = View.GONE
+
+        binding.txtLocationDisplay.visibility = View.VISIBLE
+        binding.txtLocation.visibility = View.GONE
+
         binding.btnEditProfile.text = "Edit Profile"
     }
 
@@ -194,7 +198,6 @@ class ProfilePageHouse : AppCompatActivity() {
     private fun saveChanges() {
         val editor = sharedPreferences.edit()
 
-        // Save text fields
         val username = binding.txtUsername.text.toString()
         val email = binding.txtEmail.text.toString()
         val phone = binding.txtPhone.text.toString()
@@ -205,11 +208,9 @@ class ProfilePageHouse : AppCompatActivity() {
         editor.putString("phone", phone)
         editor.putString("location", location)
 
-        // Save preferences
-        editor.putBoolean("notifications", binding.switchNotifications.isChecked)
         editor.putBoolean("darkMode", binding.switchDarkMode.isChecked)
         editor.putBoolean("fingerprintEnabled", binding.switchFingerprint.isChecked)
-        // Save profile image URI if changed
+
         tempProfileUri?.let {
             editor.putString("profileImageUri", it.toString())
         }
@@ -217,6 +218,9 @@ class ProfilePageHouse : AppCompatActivity() {
         editor.apply()
 
         binding.txtUsername.text = username
+        binding.txtEmailDisplay.text = email
+        binding.txtPhoneDisplay.text = phone
+        binding.txtLocationDisplay.text = location
 
         disableEditMode()
         Toast.makeText(this, "Changes saved successfully", Toast.LENGTH_SHORT).show()
@@ -228,8 +232,10 @@ class ProfilePageHouse : AppCompatActivity() {
         binding.txtPhone.setText(originalValues["phone"])
         binding.txtLocation.setText(originalValues["location"])
 
+        // Reset temp profile image
         tempProfileUri = null
 
+        // Restore original profile image
         val profileImageUriString = sharedPreferences.getString("profileImageUri", null)
         if (profileImageUriString != null) {
             try {

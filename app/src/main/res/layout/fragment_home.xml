@@ -102,7 +102,8 @@
                     android:layout_width="45dp"
                     android:layout_height="45dp"
                     android:id="@+id/viewicon"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="20dp"
+
                     app:cardBackgroundColor="#A2E1FD"
                     android:layout_marginLeft="10dp"
                     app:cardCornerRadius="22.5dp">
