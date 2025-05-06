@@ -20,8 +20,7 @@ class ExpiryAlertsActivity : AppCompatActivity() {
     private val alertItems = mutableListOf<InventoryItem>()
     private lateinit var database: DatabaseReference
 
-    // Define the alert threshold in days
-    private val ALERT_DAYS_THRESHOLD = 5
+    private val ALERT_DAYS_THRESHOLD = 6
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +42,6 @@ class ExpiryAlertsActivity : AppCompatActivity() {
         inventoryAdapter = InventoryRecyclerAdapter(
             alertItems,
             onEditClicked = { item ->
-                // Launch edit activity
                 val intent = android.content.Intent(this, AddItemsActivity::class.java).apply {
                     putExtra("ITEM_ID", item.id)
                     putExtra("EDIT_MODE", true)

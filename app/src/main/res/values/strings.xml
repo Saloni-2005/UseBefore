@@ -3,4 +3,17 @@
     <string name="guest_mode"><u>Guest Mode</u></string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="info_content">
+        Expiry Tracker helps you keep track of your food items, medicines, and other products with expiration dates.\n
+
+        Key features:\n
+        • Add items manually with their expiry dates\n
+        • Scan barcodes to add items (Premium feature)\n
+        • Get notified before items expire\n
+        • Customize notification timing and frequency\n
+        • View items sorted by expiration date\n
+        • See alerts for items expiring in 5 days or less\n
+
+        Never waste money or resources again due to expired products!\n\n
+    </string>
 </resources>

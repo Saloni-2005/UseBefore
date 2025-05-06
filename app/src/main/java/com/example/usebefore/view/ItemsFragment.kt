@@ -13,12 +13,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.usebefore.databinding.FragmentItemsBinding
 import com.example.usebefore.repository.InventoryItem
 import com.example.usebefore.repository.ItemStatus
+import com.example.usebefore.repository.NotificationManager
 import com.example.usebefore.view.adapter.InventoryRecyclerAdapter
 import com.google.firebase.database.*
 import java.util.*
 
-
 class ItemsFragment : Fragment() {
+
+    private lateinit var notificationManager: NotificationManager
 
     private var _binding: FragmentItemsBinding? = null
     private val binding get() = _binding!!
