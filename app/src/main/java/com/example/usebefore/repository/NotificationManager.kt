@@ -67,8 +67,8 @@ class NotificationManager(private val context: Context) {
         val timeUntilExpiry = expiryTime - currentTime
         val daysUntilExpiry = TimeUnit.MILLISECONDS.toDays(timeUntilExpiry)
 
-        // Only schedule if the item is not yet expired
-        if (daysUntilExpiry >= 0) {
+        // Only schedule if the item is not yet expired and within alert threshold
+        if (daysUntilExpiry >= 0 && daysUntilExpiry <= alertThresholdDays) {
             val intent = Intent(context, NotificationReceiver::class.java).apply {
                 action = "com.example.usebefore.DAILY_NOTIFICATION"
                 putExtra("NOTIFICATION_TYPE", "DAILY")
@@ -85,6 +85,7 @@ class NotificationManager(private val context: Context) {
                 set(Calendar.HOUR_OF_DAY, notificationTimeHour)
                 set(Calendar.MINUTE, notificationTimeMinute)
                 set(Calendar.SECOND, 0)
+                set(Calendar.MILLISECOND, 0)
 
                 // If today's notification time has already passed, schedule for tomorrow
                 if (timeInMillis <= System.currentTimeMillis()) {
@@ -105,21 +106,17 @@ class NotificationManager(private val context: Context) {
                 flags
             )
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) {
-                alarmManager.setInexactRepeating(
-                    AlarmManager.RTC_WAKEUP,
-                    calendar.timeInMillis,
-                    AlarmManager.INTERVAL_DAY,
-                    pendingIntent
-                )
-            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                // For newer APIs, we set exact alarm and let the receiver reschedule for tomorrow
+            // Schedule daily repeating notification
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                // For Android 6.0+ (API 23+), use setExactAndAllowWhileIdle for the first alarm
+                // The receiver will handle rescheduling for the next day
                 alarmManager.setExactAndAllowWhileIdle(
                     AlarmManager.RTC_WAKEUP,
                     calendar.timeInMillis,
                     pendingIntent
                 )
             } else {
+                // For older versions, use setRepeating
                 alarmManager.setRepeating(
                     AlarmManager.RTC_WAKEUP,
                     calendar.timeInMillis,

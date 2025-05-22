@@ -170,15 +170,8 @@ class SettingsActivity : AppCompatActivity() {
                         item?.let { items.add(it) }
                     }
 
-                    // Cancel all existing notifications first
-                    for (item in items) {
-                        notificationManager.cancelNotificationsForItem(item.id)
-                    }
-
-                    // Schedule fresh notifications for all items
-                    for (item in items) {
-                        notificationManager.scheduleNotificationsForItem(item)
-                    }
+                    // Use the NotificationManager's rescheduleAllNotifications method
+                    notificationManager.rescheduleAllNotifications(items)
                 }
 
                 override fun onCancelled(error: DatabaseError) {

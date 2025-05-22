@@ -51,18 +51,21 @@ class NotificationReceiver : BroadcastReceiver() {
                                 notificationManager.showExpiryNotification(item, daysUntilExpiry)
                             }
 
-                            // Always schedule the next daily notification regardless of expiry status
-                            val notificationTimeHour = preferenceHelper.getNotificationTimeHour()
-                            val notificationTimeMinute = preferenceHelper.getNotificationTimeMinute()
+                            // Schedule the next daily notification if item hasn't expired yet
+                            if (daysUntilExpiry >= 0) {
+                                val notificationTimeHour = preferenceHelper.getNotificationTimeHour()
+                                val notificationTimeMinute = preferenceHelper.getNotificationTimeMinute()
 
-                            scheduleTomorrowNotification(
-                                context,
-                                item,
-                                notificationTimeHour,
-                                notificationTimeMinute
-                            )
+                                scheduleTomorrowNotification(
+                                    context,
+                                    item,
+                                    notificationTimeHour,
+                                    notificationTimeMinute
+                                )
+                            }
                         }
                         "EXPIRED" -> {
+                            // Show expiry notification
                             notificationManager.showExpiryNotification(item, 0)
                         }
                     }
@@ -70,7 +73,7 @@ class NotificationReceiver : BroadcastReceiver() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                // Handle error
+                // Handle error - you might want to log this or retry
             }
         })
     }
@@ -115,27 +118,34 @@ class NotificationReceiver : BroadcastReceiver() {
             set(Calendar.MILLISECOND, 0)
         }
 
-        // Schedule the alarm using appropriate method for the API level
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) {
-            // For Android 12+ without SCHEDULE_EXACT_ALARM permission
-            alarmManager.set(
-                AlarmManager.RTC_WAKEUP,
-                calendar.timeInMillis,
-                pendingIntent
-            )
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            alarmManager.setExactAndAllowWhileIdle(
-                AlarmManager.RTC_WAKEUP,
-                calendar.timeInMillis,
-                pendingIntent
-            )
-        } else {
-            // For older versions
-            alarmManager.setExact(
-                AlarmManager.RTC_WAKEUP,
-                calendar.timeInMillis,
-                pendingIntent
-            )
+        // Check if the item will still be within alert threshold tomorrow
+        val tomorrowTime = calendar.timeInMillis
+        val daysUntilExpiryTomorrow = TimeUnit.MILLISECONDS.toDays(item.expiryTimestamp - tomorrowTime).toInt()
+
+        // Only schedule if item will still be relevant tomorrow (not expired)
+        if (daysUntilExpiryTomorrow >= 0) {
+            // Schedule the alarm using appropriate method for the API level
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) {
+                // For Android 12+ without SCHEDULE_EXACT_ALARM permission
+                alarmManager.set(
+                    AlarmManager.RTC_WAKEUP,
+                    calendar.timeInMillis,
+                    pendingIntent
+                )
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                alarmManager.setExactAndAllowWhileIdle(
+                    AlarmManager.RTC_WAKEUP,
+                    calendar.timeInMillis,
+                    pendingIntent
+                )
+            } else {
+                // For older versions
+                alarmManager.setExact(
+                    AlarmManager.RTC_WAKEUP,
+                    calendar.timeInMillis,
+                    pendingIntent
+                )
+            }
         }
     }
 }
